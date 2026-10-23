@@ -8,3 +8,7 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+// ============= Project rules =============
+
+- The parish office dashboard (/dashboard) and the service_requests table are public by design (anon SELECT/INSERT/UPDATE policies) — no auth was requested. If the user later asks for staff login, move the dashboard under `_authenticated` and tighten the RLS policies before publishing.
