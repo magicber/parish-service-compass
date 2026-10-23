@@ -15,10 +15,10 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div className="flex min-h-[60vh] items-center justify-center px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
+        <h1 className="font-display text-7xl font-semibold text-primary">404</h1>
+        <h2 className="mt-4 font-display text-2xl font-medium">Page not found</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           The page you're looking for doesn't exist or has been moved.
         </p>
@@ -27,7 +27,7 @@ function NotFoundComponent() {
             to="/"
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Go home
+            Back to home
           </Link>
         </div>
       </div>
@@ -43,9 +43,9 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   }, [error]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div className="flex min-h-[60vh] items-center justify-center px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
+        <h1 className="font-display text-2xl font-semibold tracking-tight text-foreground">
           This page didn't load
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
@@ -61,12 +61,12 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
           >
             Try again
           </button>
-          <a
-            href="/"
+          <Link
+            to="/"
             className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
           >
             Go home
-          </a>
+          </Link>
         </div>
       </div>
     </div>
@@ -78,16 +78,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "St. Joseph Parish" },
+      { name: "description", content: "St. Joseph Parish — worship schedule, sacramental services, and parish office." },
+      { property: "og:title", content: "St. Joseph Parish" },
+      { property: "og:description", content: "Worship schedule, sacramental services, and parish office." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Work+Sans:wght@300;400;500;600&display=swap",
+      },
       {
         rel: "stylesheet",
         href: appCss,
@@ -115,13 +119,85 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+function SiteHeader() {
+  return (
+    <header className="border-b border-border bg-background/95">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
+        <Link to="/" className="flex items-center gap-3">
+          <span className="flex size-10 items-center justify-center rounded-full bg-primary font-display text-xl font-semibold text-primary-foreground">
+            ✝
+          </span>
+          <span className="leading-tight">
+            <span className="block font-display text-xl font-semibold tracking-wide">
+              St. Joseph Parish
+            </span>
+            <span className="block text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+              Sancta Familia Ora Pro Nobis
+            </span>
+          </span>
+        </Link>
+        <nav className="flex items-center gap-1 text-sm sm:gap-2">
+          <Link
+            to="/"
+            className="rounded-md px-3 py-2 font-medium transition-colors hover:bg-secondary hover:text-secondary-foreground [&.active]:text-primary"
+          >
+            Home
+          </Link>
+          <Link
+            to="/request"
+            className="rounded-md px-3 py-2 font-medium transition-colors hover:bg-secondary hover:text-secondary-foreground [&.active]:text-primary"
+          >
+            Request a Service
+          </Link>
+          <Link
+            to="/dashboard"
+            className="rounded-md bg-secondary px-3 py-2 font-medium text-secondary-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+          >
+            Parish Office
+          </Link>
+        </nav>
+      </div>
+    </header>
+  );
+}
+
+function SiteFooter() {
+  return (
+    <footer className="border-t border-border bg-secondary/60">
+      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+        <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <p className="font-display text-lg font-semibold">St. Joseph Parish</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              12 Mabini Street, San Roque · (02) 8555-0120
+            </p>
+            <p className="text-sm text-muted-foreground">
+              parishoffice@stjoseph.org · Open Mon–Sat, 8:00 AM – 5:00 PM
+            </p>
+          </div>
+          <div className="text-sm text-muted-foreground sm:text-right">
+            <p>“Pray and work.” — Rule of St. Benedict</p>
+            <p className="mt-2">© 2026 St. Joseph Parish. All rights reserved.</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <div className="flex min-h-screen flex-col bg-background text-foreground">
+        <SiteHeader />
+        <main className="flex-1">
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <Outlet />
+        </main>
+        <SiteFooter />
+      </div>
     </QueryClientProvider>
   );
 }
