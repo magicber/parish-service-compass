@@ -2,6 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { SERVICE_LABELS, SERVICE_TYPES } from "@/lib/requests.functions";
+import {
+  getFieldGuide,
+  getPlaceholder,
+  getServiceGuide,
+  type FieldKey,
+} from "@/lib/service-guidance";
 
 export const Route = createFileRoute("/request")({
   head: () => ({
@@ -28,6 +34,66 @@ export const Route = createFileRoute("/request")({
 const inputClass =
   "w-full rounded-md border border-input bg-card px-3 py-2 text-sm outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-ring focus:ring-2 focus:ring-ring/30";
 
+function FieldAssistant({
+  serviceType,
+  field,
+}: {
+  serviceType: string;
+  field: FieldKey | null;
+}) {
+  const guide = field ? getFieldGuide(serviceType, field) : null;
+  const service = getServiceGuide(serviceType);
+  const serviceLabel = SERVICE_LABELS[serviceType] ?? serviceType;
+
+  return (
+    <aside
+      aria-live="polite"
+      className="mt-10 rounded-xl border border-border bg-card p-5 sm:p-6"
+    >
+      <div className="flex items-start gap-3">
+        <span
+          className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent/25 text-sm text-accent-foreground"
+          aria-hidden
+        >
+          ✦
+        </span>
+        {guide ? (
+          <div className="min-w-0">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Guide · {serviceLabel}
+            </p>
+            <h2 className="mt-0.5 font-display text-lg font-semibold">{guide.title}</h2>
+            <p className="mt-1 text-sm text-muted-foreground">{guide.hint}</p>
+            {guide.example && (
+              <p className="mt-2 text-sm text-muted-foreground">
+                For example:{" "}
+                <span className="font-medium text-foreground">{guide.example}</span>
+              </p>
+            )}
+          </div>
+        ) : (
+          <div className="min-w-0">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              {serviceLabel}
+            </p>
+            <p className="mt-1 text-sm">{service.overview}</p>
+            <ul className="mt-3 space-y-1.5 text-sm text-muted-foreground">
+              {service.tips.map((tip) => (
+                <li key={tip} className="flex gap-2">
+                  <span className="text-accent" aria-hidden>
+                    •
+                  </span>
+                  <span>{tip}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </aside>
+  );
+}
+
 function RequestPage() {
   const [serviceType, setServiceType] = useState<string>("baptism");
   const [fullName, setFullName] = useState("");
@@ -38,6 +104,7 @@ function RequestPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [focusedField, setFocusedField] = useState<FieldKey | null>(null);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -121,6 +188,8 @@ function RequestPage() {
         </p>
       </div>
 
+      <FieldAssistant serviceType={serviceType} field={focusedField} />
+
       <form
         onSubmit={handleSubmit}
         className="mt-10 space-y-5 rounded-xl border border-border bg-card p-6 sm:p-8"
@@ -133,6 +202,7 @@ function RequestPage() {
             id="serviceType"
             value={serviceType}
             onChange={(e) => setServiceType(e.target.value)}
+            onFocus={() => setFocusedField("serviceType")}
             className={inputClass}
           >
             {SERVICE_TYPES.map((t) => (
@@ -151,7 +221,8 @@ function RequestPage() {
             id="fullName"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            placeholder="e.g. Maria Santos"
+            onFocus={() => setFocusedField("fullName")}
+            placeholder={getPlaceholder(serviceType, "fullName") ?? "e.g. Maria Santos"}
             maxLength={120}
             className={inputClass}
           />
@@ -167,6 +238,7 @@ function RequestPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              onFocus={() => setFocusedField("email")}
               placeholder="you@example.com"
               maxLength={255}
               className={inputClass}
@@ -181,7 +253,8 @@ function RequestPage() {
               id="phone"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              placeholder="+63 917 000 0000"
+              onFocus={() => setFocusedField("phone")}
+              placeholder={getPlaceholder(serviceType, "phone") ?? "+63 917 000 0000"}
               maxLength={40}
               className={inputClass}
             />
@@ -198,6 +271,7 @@ function RequestPage() {
             type="date"
             value={preferredDate}
             onChange={(e) => setPreferredDate(e.target.value)}
+            onFocus={() => setFocusedField("preferredDate")}
             className={inputClass}
           />
         </div>
@@ -211,9 +285,13 @@ function RequestPage() {
             id="notes"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
+            onFocus={() => setFocusedField("notes")}
             rows={4}
             maxLength={1000}
-            placeholder="Anything the parish office should know — number of sponsors, location, intentions…"
+            placeholder={
+              getPlaceholder(serviceType, "notes") ??
+              "Anything the parish office should know — number of sponsors, location, intentions…"
+            }
             className={`${inputClass} resize-y`}
           />
         </div>
