@@ -14,6 +14,7 @@ export type FieldKey =
 export interface FieldGuide {
   title: string;
   hint: string;
+  description?: string;
   example?: string;
   placeholder?: string;
 }
@@ -28,28 +29,33 @@ export const DEFAULT_FIELD_GUIDES: Record<Exclude<FieldKey, "serviceType">, Fiel
   fullName: {
     title: "Full name",
     hint: "Use the complete legal name as written on government-issued ID or church records.",
+    description: "As written on your ID or church record.",
     example: "Maria Luisa Santos-Reyes",
     placeholder: "e.g. Maria Santos",
   },
   email: {
     title: "Email address",
     hint: "This is where the parish office sends the confirmation, schedule and requirements list.",
+    description: "The parish office sends the confirmation here.",
     example: "you@example.com",
     placeholder: "you@example.com",
   },
   phone: {
     title: "Contact number (optional)",
     hint: "A mobile number lets the office reach you faster for schedule changes.",
+    description: "So the office can call or text you about your schedule.",
     example: "+63 917 123 4567",
     placeholder: "+63 917 000 0000",
   },
   preferredDate: {
     title: "Preferred date (optional)",
     hint: "Pick your first choice — the office confirms final dates since sacraments follow a set calendar.",
+    description: "Your first choice — the office confirms the final schedule.",
   },
   notes: {
     title: "Notes (optional)",
     hint: "Anything the office should know to prepare your request.",
+    description: "Extra details like names, addresses or schedules.",
   },
 };
 
