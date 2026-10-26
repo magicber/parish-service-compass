@@ -67,6 +67,7 @@ export const SERVICE_GUIDES: Record<string, ServiceGuide> = {
       fullName: {
         title: "Full name",
         hint: "Enter the child's full legal name as it appears on the birth certificate.",
+        description: "Full name of the child being baptized.",
         example: "Juan Miguel Dela Cruz",
         placeholder: "Child's full name, e.g. Juan Miguel Dela Cruz",
       },
@@ -96,6 +97,7 @@ export const SERVICE_GUIDES: Record<string, ServiceGuide> = {
       fullName: {
         title: "Full name",
         hint: "Enter the groom's full name, then the bride's, separated by an ampersand.",
+        description: "Groom and bride, joined by an ampersand (&).",
         example: "John Reyes & Ana Cruz",
         placeholder: "e.g. John Reyes & Ana Cruz",
       },
@@ -121,6 +123,7 @@ export const SERVICE_GUIDES: Record<string, ServiceGuide> = {
       fullName: {
         title: "Full name",
         hint: "Enter the full name of the deceased.",
+        description: "Full name of the deceased.",
         example: "Pedro Ramos",
         placeholder: "Name of the deceased, e.g. Pedro Ramos",
       },
@@ -146,6 +149,7 @@ export const SERVICE_GUIDES: Record<string, ServiceGuide> = {
       fullName: {
         title: "Full name",
         hint: "Enter the name of the homeowner or the family head requesting the blessing.",
+        description: "Name of the homeowner or family head.",
         example: "Corazon Villanueva",
         placeholder: "e.g. Corazon Villanueva",
       },
@@ -171,6 +175,7 @@ export const SERVICE_GUIDES: Record<string, ServiceGuide> = {
       fullName: {
         title: "Full name",
         hint: "Enter the full name of the child receiving First Communion.",
+        description: "Full name of the child receiving communion.",
         example: "Sofia Marie Aquino",
         placeholder: "Child's full name, e.g. Sofia Marie Aquino",
       },
@@ -192,6 +197,7 @@ export const SERVICE_GUIDES: Record<string, ServiceGuide> = {
       fullName: {
         title: "Full name",
         hint: "Enter the full name of the candidate being confirmed.",
+        description: "Full name of the confirmation candidate.",
         example: "Gabriel Mendoza",
         placeholder: "Candidate's full name, e.g. Gabriel Mendoza",
       },
@@ -213,6 +219,7 @@ export const SERVICE_GUIDES: Record<string, ServiceGuide> = {
       fullName: {
         title: "Full name",
         hint: "Enter the name of the person the Mass is offered for.",
+        description: "Name of the person the Mass is offered for.",
         example: "+ Remedios Garcia (deceased)",
         placeholder: "e.g. Remedios Garcia",
       },
@@ -242,6 +249,7 @@ export function getFieldGuide(serviceType: string, field: FieldKey): FieldGuide 
     return {
       title: "Service requested",
       hint: getServiceGuide(serviceType).overview,
+      description: "Choose which celebration or request this form is for.",
     };
   }
   return { ...DEFAULT_FIELD_GUIDES[field], ...getServiceGuide(serviceType).fields[field] };
