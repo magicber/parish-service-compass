@@ -2,6 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { SERVICE_LABELS, SERVICE_TYPES } from "@/lib/requests.functions";
+import {
+  getFieldGuide,
+  getPlaceholder,
+  getServiceGuide,
+  type FieldKey,
+} from "@/lib/service-guidance";
 
 export const Route = createFileRoute("/request")({
   head: () => ({
