@@ -34,6 +34,66 @@ export const Route = createFileRoute("/request")({
 const inputClass =
   "w-full rounded-md border border-input bg-card px-3 py-2 text-sm outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-ring focus:ring-2 focus:ring-ring/30";
 
+function FieldAssistant({
+  serviceType,
+  field,
+}: {
+  serviceType: string;
+  field: FieldKey | null;
+}) {
+  const guide = field ? getFieldGuide(serviceType, field) : null;
+  const service = getServiceGuide(serviceType);
+  const serviceLabel = SERVICE_LABELS[serviceType] ?? serviceType;
+
+  return (
+    <aside
+      aria-live="polite"
+      className="mt-10 rounded-xl border border-border bg-card p-5 sm:p-6"
+    >
+      <div className="flex items-start gap-3">
+        <span
+          className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent/25 text-sm text-accent-foreground"
+          aria-hidden
+        >
+          ✦
+        </span>
+        {guide ? (
+          <div className="min-w-0">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Guide · {serviceLabel}
+            </p>
+            <h2 className="mt-0.5 font-display text-lg font-semibold">{guide.title}</h2>
+            <p className="mt-1 text-sm text-muted-foreground">{guide.hint}</p>
+            {guide.example && (
+              <p className="mt-2 text-sm text-muted-foreground">
+                For example:{" "}
+                <span className="font-medium text-foreground">{guide.example}</span>
+              </p>
+            )}
+          </div>
+        ) : (
+          <div className="min-w-0">
+            <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              {serviceLabel}
+            </p>
+            <p className="mt-1 text-sm">{service.overview}</p>
+            <ul className="mt-3 space-y-1.5 text-sm text-muted-foreground">
+              {service.tips.map((tip) => (
+                <li key={tip} className="flex gap-2">
+                  <span className="text-accent" aria-hidden>
+                    •
+                  </span>
+                  <span>{tip}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </aside>
+  );
+}
+
 function RequestPage() {
   const [serviceType, setServiceType] = useState<string>("baptism");
   const [fullName, setFullName] = useState("");
@@ -44,6 +104,7 @@ function RequestPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [focusedField, setFocusedField] = useState<FieldKey | null>(null);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -126,6 +187,8 @@ function RequestPage() {
           and requirements.
         </p>
       </div>
+
+      <FieldAssistant serviceType={serviceType} field={focusedField} />
 
       <form
         onSubmit={handleSubmit}
