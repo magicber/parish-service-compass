@@ -202,6 +202,7 @@ function RequestPage() {
             id="serviceType"
             value={serviceType}
             onChange={(e) => setServiceType(e.target.value)}
+            onFocus={() => setFocusedField("serviceType")}
             className={inputClass}
           >
             {SERVICE_TYPES.map((t) => (
@@ -220,7 +221,8 @@ function RequestPage() {
             id="fullName"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            placeholder="e.g. Maria Santos"
+            onFocus={() => setFocusedField("fullName")}
+            placeholder={getPlaceholder(serviceType, "fullName") ?? "e.g. Maria Santos"}
             maxLength={120}
             className={inputClass}
           />
