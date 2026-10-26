@@ -238,6 +238,7 @@ function RequestPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              onFocus={() => setFocusedField("email")}
               placeholder="you@example.com"
               maxLength={255}
               className={inputClass}
@@ -252,7 +253,8 @@ function RequestPage() {
               id="phone"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              placeholder="+63 917 000 0000"
+              onFocus={() => setFocusedField("phone")}
+              placeholder={getPlaceholder(serviceType, "phone") ?? "+63 917 000 0000"}
               maxLength={40}
               className={inputClass}
             />
@@ -269,6 +271,7 @@ function RequestPage() {
             type="date"
             value={preferredDate}
             onChange={(e) => setPreferredDate(e.target.value)}
+            onFocus={() => setFocusedField("preferredDate")}
             className={inputClass}
           />
         </div>
@@ -282,9 +285,13 @@ function RequestPage() {
             id="notes"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
+            onFocus={() => setFocusedField("notes")}
             rows={4}
             maxLength={1000}
-            placeholder="Anything the parish office should know — number of sponsors, location, intentions…"
+            placeholder={
+              getPlaceholder(serviceType, "notes") ??
+              "Anything the parish office should know — number of sponsors, location, intentions…"
+            }
             className={`${inputClass} resize-y`}
           />
         </div>
