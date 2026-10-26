@@ -228,7 +228,7 @@ export const SERVICE_GUIDES: Record<string, ServiceGuide> = {
 };
 
 export function getServiceGuide(serviceType: string): ServiceGuide {
-  return SERVICE_GUIDES[serviceType] ?? SERVICE_GUIDES.baptism;
+  return SERVICE_GUIDES[serviceType] ?? SERVICE_GUIDES["baptism"]!;
 }
 
 export function getFieldGuide(serviceType: string, field: FieldKey): FieldGuide {
